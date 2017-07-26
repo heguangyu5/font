@@ -145,6 +145,7 @@ class WOFF
             throw new InvalidArgumentException('header: invalid privOffset and privLength');
         }
 
+        $header['flavor'] = sprintf("0x%08X", $header['flavor']);
         $this->header = $header;
     }
 
