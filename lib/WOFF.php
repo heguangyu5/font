@@ -295,6 +295,9 @@ class WOFF
                         if ($item) {
                             foreach ($item['points'] as $point) {
                                 $info[] = '        (' . $point['x'] . ',' . $point['y'] . ')';
+                                if (isset($point['end'])) {
+                                    $info[] = '        (end)';
+                                }
                             }
                         } else {
                             $info[] = '        null';

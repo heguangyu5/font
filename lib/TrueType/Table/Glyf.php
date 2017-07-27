@@ -158,7 +158,13 @@ class TrueType_Table_Glyf
             }
             $points[$idx] = $point;
         }
+        // mark end
+        foreach ($endPtsOfContours as $idx) {
+            $points[$idx]['end'] = true;
+        }
+
         $item['points'] = $points;
+
         return $item;
     }
 
