@@ -47,7 +47,6 @@ class TrueType_Table_Head
         'macStyle'           => 4,
         'lowestRecPPEM'      => 4,
         'fontDirectionHint'  => 4,
-        'indexToLocFormat'   => 4,
         'glyphDataFormat'    => 4
     );
 
@@ -77,7 +76,9 @@ class TrueType_Table_Head
         }
 
         foreach ($head as $key => $value) {
-            $head[$key] = sprintf('0x%0' . self::$headHexLen[$key] . 'X', $value);
+            if (isset(self::$headHexLen[$key])) {
+                $head[$key] = sprintf('0x%0' . self::$headHexLen[$key] . 'X', $value);
+            }
         }
 
         $head['created']  .= substr($head['created_low'], 2);

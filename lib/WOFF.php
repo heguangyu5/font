@@ -276,6 +276,18 @@ class WOFF
             }
             $info[] = '';
         }
+        // table loca
+        if (isset($this->fontTables['head'])) {
+            if (isset($this->fontTables['loca'])) {
+                include_once __DIR__ . '/TrueType/Table/Loca.php';
+                $loca = new TrueType_Table_Loca($this->fontTables['loca'], $head->indexToLocaFormat);
+                $info[] = '# table loca';
+                foreach ($loca->toArray() as $idx => $glyf) {
+                    $info[] = '    ' . $idx . '. ' . 'offset = ' . $glyf['offset'] . ' length = ' . $glyf['length'] . ($glyf['length'] ? '' : ' (no outline)');
+                }
+                $info[] = '';
+            }
+        }
         $info = implode("\n", $info) . "\n";
         file_put_contents($outputDir . '/woff.info', $info);
         echo $info;
