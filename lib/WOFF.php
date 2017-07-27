@@ -261,7 +261,20 @@ class WOFF
                 $info[] = '    ' . $key . ' = ' . $value;
             }
             $info[] = '';
-            unset($this->fontTables['head']);
+        }
+        // table name
+        if (isset($this->fontTables['name'])) {
+            include_once __DIR__ . '/TrueType/Table/Name.php';
+            $name = new TrueType_Table_Name($this->fontTables['name']);
+            $info[] = '# table name';
+            foreach ($name->getNameRecords() as $idx => $nameRecord) {
+                $idx++;
+                $info[] = '    ' . $idx . ':';
+                foreach ($nameRecord as $key => $value) {
+                    $info[] = '        ' . $key . ' = ' . $value;
+                }
+            }
+            $info[] = '';
         }
         $info = implode("\n", $info) . "\n";
         file_put_contents($outputDir . '/woff.info', $info);
