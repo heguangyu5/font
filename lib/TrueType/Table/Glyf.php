@@ -128,6 +128,12 @@ class TrueType_Table_Glyf
                     $data = substr($data, 2);
                 }
             }
+            if ($point['x'] < $item['xMin']) {
+                $point['x'] = $item['xMin'];
+            }
+            if ($point['x'] > $item['xMax']) {
+                $point['x'] = $item['xMax'];
+            }
             $points[$idx] = $point;
         }
         // y
@@ -155,6 +161,12 @@ class TrueType_Table_Glyf
                     $point['y'] = $prevY + $value;
                     $data = substr($data, 2);
                 }
+            }
+            if ($point['y'] < $item['yMin']) {
+                $point['y'] = $item['yMin'];
+            }
+            if ($point['y'] > $item['yMax']) {
+                $point['y'] = $item['yMax'];
             }
             $points[$idx] = $point;
         }
