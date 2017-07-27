@@ -90,7 +90,7 @@ class TrueType_Table_Head
 
     public function __get($key)
     {
-        if (!isset($this->head[$key])) {
+        if (isset($this->head[$key])) {
             return $this->head[$key];
         }
 

@@ -280,12 +280,28 @@ class WOFF
         if (isset($this->fontTables['head'])) {
             if (isset($this->fontTables['loca'])) {
                 include_once __DIR__ . '/TrueType/Table/Loca.php';
-                $loca = new TrueType_Table_Loca($this->fontTables['loca'], $head->indexToLocaFormat);
+                $loca = new TrueType_Table_Loca($this->fontTables['loca'], $head->indexToLocFormat);
                 $info[] = '# table loca';
-                foreach ($loca->toArray() as $idx => $glyf) {
-                    $info[] = '    ' . $idx . '. ' . 'offset = ' . $glyf['offset'] . ' length = ' . $glyf['length'] . ($glyf['length'] ? '' : ' (no outline)');
+                foreach ($loca->toArray() as $idx => $glyfPos) {
+                    $info[] = '    ' . $idx . '. ' . 'offset = ' . $glyfPos['offset'] . ' length = ' . $glyfPos['length'] . ($glyfPos['length'] ? '' : ' (no outline)');
                 }
                 $info[] = '';
+                if (isset($this->fontTables['glyf'])) {
+                    include_once __DIR__ . '/TrueType/Table/Glyf.php';
+                    $glyf = new TrueType_Table_Glyf($this->fontTables['glyf'], $loca);
+                    $info[] = '# table glyf';
+                    foreach ($glyf->toArray() as $idx => $item) {
+                        $info[] = '    '. $idx . '.';
+                        if ($item) {
+                            foreach ($item['points'] as $point) {
+                                $info[] = '        (' . $point['x'] . ',' . $point['y'] . ')';
+                            }
+                        } else {
+                            $info[] = '        null';
+                        }
+                    }
+                    $info[] = '';
+                }
             }
         }
         $info = implode("\n", $info) . "\n";
