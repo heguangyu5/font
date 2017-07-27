@@ -239,6 +239,7 @@ class WOFF
                 $entry['origLength']
             );
         }
+        $info[] = '';
         // metadata
         if ($this->metadata) {
             $info[] = '# metadata';
@@ -250,6 +251,17 @@ class WOFF
             $info[] = '# privateData';
             $info[] = '    length = ' . strlen($this->privateData);
             file_put_contents($outputDir . '/woff.privateData', $this->privateData);
+        }
+        // table head
+        if (isset($this->fontTables['head'])) {
+            include_once __DIR__ . '/TrueType/Table/Head.php';
+            $head = new TrueType_Table_Head($this->fontTables['head']);
+            $info[] = '# table head';
+            foreach ($head->toArray() as $key => $value) {
+                $info[] = '    ' . $key . ' = ' . $value;
+            }
+            $info[] = '';
+            unset($this->fontTables['head']);
         }
         $info = implode("\n", $info) . "\n";
         file_put_contents($outputDir . '/woff.info', $info);
