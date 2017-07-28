@@ -106,17 +106,17 @@ class TrueType_Table_Glyf
         }
         // x
         foreach ($points as $idx => $point) {
+            $prevX = $idx == 0 ? 0 : $points[$idx-1]['x'];
             if ($point['xOneByte']) {
                 $value = unpack('C', $data[0]);
                 $value = $value[1];
                 if ($point['xSame']) {
-                    $point['x'] = $value;
+                    $point['x'] = $prevX + $value;
                 } else {
-                    $point['x'] = 0 - $value;
+                    $point['x'] = $prevX - $value;
                 }
                 $data = substr($data, 1);
             } else {
-                $prevX = $idx == 0 ? 0 : $points[$idx-1]['x'];
                 if ($point['xSame']) {
                     $point['x'] = $prevX;
                 } else {
@@ -140,17 +140,17 @@ class TrueType_Table_Glyf
         }
         // y
         foreach ($points as $idx => $point) {
+            $prevY = $idx == 0 ? 0 : $points[$idx-1]['y'];
             if ($point['yOneByte']) {
                 $value = unpack('C', $data[0]);
                 $value = $value[1];
                 if ($point['ySame']) {
-                    $point['y'] = $value;
+                    $point['y'] = $prevY + $value;
                 } else {
-                    $point['y'] = 0 - $value;
+                    $point['y'] = $prevY - $value;
                 }
                 $data = substr($data, 1);
             } else {
-                $prevY = $idx == 0 ? 0 : $points[$idx-1]['y'];
                 if ($point['ySame']) {
                     $point['y'] = $prevY;
                 } else {
