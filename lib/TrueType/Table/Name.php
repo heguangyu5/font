@@ -305,6 +305,10 @@ class TrueType_Table_Name
                     array_unshift($args, 'v*');
                     $nameRecord['string'] = iconv('UCS-2', 'UTF-8', call_user_func_array('pack', $args));
                 }
+            } else if ($nameRecord['platformIDName'] == 'Unicode') {
+                $args = unpack('n*', $nameRecord['string']);
+                array_unshift($args, 'v*');
+                $nameRecord['string'] = iconv('UTF-16', 'UTF-8', call_user_func_array('pack', $args));
             }
             $this->nameRecords[] = $nameRecord;
             $offset += 12;

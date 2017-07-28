@@ -55,8 +55,10 @@ class TrueType_Table_Glyf
             return $item;
         }
         if ($item['numberOfContours'] > 0) {
+            $item['type'] = 'simple';
             return $this->parseSimple($item, substr($data, 10));
         }
+        $item['type'] = 'compound';
         return $this->parseCompound($item, substr($data, 10));
     }
 

@@ -293,10 +293,13 @@ class WOFF
                     foreach ($glyf->toArray() as $idx => $item) {
                         $info[] = '    '. $idx . '.';
                         if ($item) {
-                            foreach ($item['points'] as $point) {
-                                $info[] = '        (' . $point['x'] . ',' . $point['y'] . ')';
-                                if (isset($point['end'])) {
-                                    $info[] = '        (end)';
+                            $info[] = '        ' . $item['type'];
+                            if ($item['type'] == 'simple') {
+                                foreach ($item['points'] as $point) {
+                                    $info[] = '        (' . $point['x'] . ',' . $point['y'] . ')';
+                                    if (isset($point['end'])) {
+                                        $info[] = '        (end)';
+                                    }
                                 }
                             }
                         } else {
