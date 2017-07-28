@@ -1,5 +1,7 @@
 <?php
 
+// @see https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6head.html
+
 include_once __DIR__ . '/../define.php';
 
 class TrueType_Table_Head

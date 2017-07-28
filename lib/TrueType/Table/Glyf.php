@@ -1,5 +1,7 @@
 <?php
 
+// @see https://developer.apple.com/fonts/TrueType-Reference-Manual/RM06/Chap6glyf.html
+
 include_once __DIR__ . '/../define.php';
 
 class TrueType_Table_Glyf
@@ -108,6 +110,7 @@ class TrueType_Table_Glyf
         foreach ($points as $idx => $point) {
             $prevX = $idx == 0 ? 0 : $points[$idx-1]['x'];
             if ($point['xOneByte']) {
+                // 这里文档说的不清楚
                 $value = unpack('C', $data[0]);
                 $value = $value[1];
                 if ($point['xSame']) {
@@ -142,6 +145,7 @@ class TrueType_Table_Glyf
         foreach ($points as $idx => $point) {
             $prevY = $idx == 0 ? 0 : $points[$idx-1]['y'];
             if ($point['yOneByte']) {
+                // 这里文档说的不清楚
                 $value = unpack('C', $data[0]);
                 $value = $value[1];
                 if ($point['ySame']) {
