@@ -23,12 +23,12 @@ class TrueType_Table_Name
     );
     protected static $nameRecordFormatStr;
 
-    protected static $platformIDNameMap = array(
+    public static $platformIDNameMap = array(
         0 => 'Unicode',
         1 => 'Macintosh',
         3 => 'Microsoft'
     );
-    protected static $platformSpecificIDNameMap = array(
+    public static $platformSpecificIDNameMap = array(
         'Unicode'   => array(
             0 => 'Default semantics',
             1 => 'Version 1.1 semantics',
@@ -88,7 +88,7 @@ class TrueType_Table_Name
         )
     );
 
-    protected static $languageIDNameMap = array(
+    public static $languageIDNameMap = array(
         'Macintosh' => array(
             0 => 'English',
             1 => 'French',
