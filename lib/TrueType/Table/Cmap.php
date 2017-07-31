@@ -15,6 +15,7 @@ class TrueType_Table_Cmap
     protected static $subtableFormatStr;
 
     protected $subtables;
+    protected $codeMapGenerated;
 
     public function __construct($data)
     {
@@ -179,5 +180,69 @@ class TrueType_Table_Cmap
     public function toArray()
     {
         return $this->subtables;
+    }
+
+    public function getCodeMap()
+    {
+        if ($this->codeMapGenerated) {
+            return $this->subtables;
+        }
+
+        foreach ($this->subtables as $idx => $subtable) {
+            switch ($subtable['format']) {
+            case 4:
+                $method = 'generateCodeMap4';
+                break;
+            case 6:
+                $method = 'generateCodeMap6';
+                break;
+            case 12:
+                $method = 'generateCodeMap12';
+                break;
+            }
+            $this->subtables[$idx]['codeMap'] = $this->$method($subtable);
+        }
+    }
+
+    protected function generateCodeMap4($subtable)
+    {
+        $codeMap = array();
+        foreach ($subtable['startCode'] as $idx => $startCode) {
+            $endCode       = $subtable['endCode'][$idx];
+            $idRangeOffset = $subtable['idRangeOffset'][$idx];
+            $idDelta       = $subtable['idDelta'][$idx];
+            for ($i = $startCode; $i <= $endCode; $i++) {
+                $hex = sprintf("0x%04X", $i);
+                if ($idRangeOffset == 0) {
+                    $codeMap[$hex] = ($idDelta + $i) & 0xFFFF;
+                } else {
+                    $codeMap[$hex] = 'idRangeOffset != 0';
+                }
+            }
+        }
+
+        return $codeMap;
+    }
+
+    protected function generateCodeMap6($subtable)
+    {
+        $codeMap = array();
+        for ($i = 1; $i <= $subtable['entryCount']; $i++) {
+            $hex = sprintf("0x%04X", $subtable['firstCode'] + $i);
+            $codeMap[$hex] = $subtable['glyphIndexArray'][$i];
+        }
+        return $codeMap;
+    }
+
+    protected function generateCodeMap12($subtable)
+    {
+        $codeMap = array();
+        foreach ($subtable['groups'] as $group) {
+            for ($i = $group['startCharCode'], $j = 0; $i <= $group['endCharCode']; $i++, $j++) {
+                $hex = sprintf("0x%08X", $i);
+                $codeMap[$hex] = $group['startGlyphCode'] + $j;
+            }
+        }
+        return $codeMap;
     }
 }

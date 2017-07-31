@@ -313,6 +313,7 @@ class WOFF
         if (isset($this->fontTables['cmap'])) {
             include_once __DIR__ . '/TrueType/Table/Cmap.php';
             $cmap = new TrueType_Table_Cmap($this->fontTables['cmap']);
+            $cmap->getCodeMap();
             $info[] = '# table cmap';
             $info[] = var_export($cmap->toArray(), true);
             $info[] = '';
